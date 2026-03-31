@@ -1,0 +1,21 @@
+nameReference:
+- kind: Role
+  fieldSpecs:
+  - path: roleRef/name
+    kind: RoleBinding
+- kind: ClusterRole
+  fieldSpecs:
+  - path: roleRef/name
+    kind: ClusterRoleBinding
+  - path: roleRef/name
+    kind: RoleBinding
+
+namespace:
+- path: metadata/namespace
+  create: true
+  kind: Role
+  skip: true
+- path: metadata/namespace
+  create: true
+  kind: RoleBinding
+  skip: true

@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: tor-relay
+  namespace: tor-relay
+  labels:
+    app: tor-relay
+spec:
+  selector:
+    matchLabels:
+      app: tor-relay
+  template:
+    metadata:
+      labels:
+        app: tor-relay
+    spec:
+      securityContext:
+        fsGroup: 101
+      containers:
+        - name: tor-relay
+          image: fraguinha/tor-relay:latest # {"$imagepolicy": "flux-system:tor-relay-policy"}
+          imagePullPolicy: Always
+          securityContext:
+            runAsUser: 100
+            runAsGroup: 101
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+          env:
+            - name: OR_PORT
+              value: "9001"
+            - name: NICKNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: FAMILY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: tor-family-secret
+                  key: id
+            - name: CONTACT_INFO
+              value: "0xBDB1B7B8C83C82B739B42E74E8519CFBD01E1F2C João Fraga joao@fraguinha.com"
+          ports:
+            - containerPort: 9001
+              hostPort: 9001
+              name: or-port
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: tor-data
+              mountPath: /var/lib/tor
+            - name: tor-family-key
+              mountPath: /var/lib/tor/keys/family.secret_family_key
+              subPath: secret_family_key
+              readOnly: true
+      volumes:
+        - name: tor-data
+          hostPath:
+            path: /var/lib/tor-relay
+            type: DirectoryOrCreate
+        - name: tor-family-key
+          secret:
+            secretName: tor-family-secret
+            defaultMode: 0440

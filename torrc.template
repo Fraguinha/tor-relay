@@ -1,0 +1,10 @@
+ORPort ${OR_PORT}
+Nickname ${NICKNAME}
+ContactInfo ${CONTACT_INFO}
+FamilyId ${FAMILY_ID}
+ExitRelay 0
+SocksPort 0
+DataDirectory /var/lib/tor
+Log notice stdout
+ControlPort 9051
+CookieAuthentication 1
