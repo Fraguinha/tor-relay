@@ -18,7 +18,7 @@ spec:
         fsGroup: 101
       containers:
         - name: tor-relay
-          image: fraguinha/tor-relay:latest@sha256:03330271a3eb5ee6c6f461ca1853e26e98bf79070375bdf04d0591e13de767f1 # {"$imagepolicy": "flux-system:tor-relay-policy"}
+          image: fraguinha/tor-relay:latest@sha256:dfb00199cd920d28edbd4bbfb0e2bf33d18c8fe5b704b09f3de006e8135b95a5 # {"$imagepolicy": "flux-system:tor-relay-policy"}
           imagePullPolicy: Always
           securityContext:
             runAsUser: 100
